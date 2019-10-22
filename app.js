@@ -1,14 +1,26 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 9000;
-const dbconnect = require("./dbconnect")
-var bodyParser = require('body-parser');
 
-const Sellers = require('./Model/Sellers');
-const Cars = require('./Model/Cars');
+//setting up port environment
+const port = process.env.PORT || 9000;
+
+//starting server at port
+app.listen(port, ()=> {
+    console.log(`Server started at ${port}`)
+})
+
+//json parsing
+var bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+//database connection
+require("./dbconnect");
+
+//connection to models
+const Sellers = require('./Model/Sellers');
+const Cars = require('./Model/Cars');
 
 //Seller Route
 app.post("/seller", (req,res)=> {
@@ -25,7 +37,7 @@ app.get("/seller", (req,res)=> {
     })
 })
 
-//Cars Routes
+//Cars Route
 app.post("/cars/:sid", (req,res)=> {
     const cars = new Cars(req.body);
     cars.seller = req.params.sid;
@@ -33,13 +45,27 @@ app.post("/cars/:sid", (req,res)=> {
     Sellers.findById(req.params.sid, (err,seller)=> {
         if (err) throw err;
         else {
-            seller.car.push(cars._id);
+            seller.car.push(cars);
             seller.save();
             res.send(cars);
         }
     })
 })
-
-app.listen(port, ()=> {
-    console.log(`Server started at ${port}`)
+app.get("/cars", (req,res)=> {
+    Cars.find({}, (err, data)=> {
+        if (err) throw err;
+        res.send(data);
+    })
 })
+// app.delete("/cars/:sid", (req,res)=> {
+//     const cars = new Cars(req.body);
+//     cars.seller = req.params.sid;
+//     Cars.findByIdAndDelete(req.params.id, (err,seller)=> {
+//         if (err) throw err;
+//         else {
+//             seller.car.delete(cars._id);
+//             seller.save();
+//             res.send(data);
+//         }
+//     })
+// })
