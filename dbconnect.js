@@ -1,8 +1,14 @@
+require('dotenv').config()
+
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://khalil:khalil@kb-jgdlm.gcp.mongodb.net/kb?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true}, (err)=> {
+mongoose.connect(
+  `${process.env.DATABASE}`,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  (err) => {
     if (err) {
-        console.log(err);        
+      console.log(err);
     } else {
-        console.log("database connected");
+      console.log("database connected");
     }
-})
+  }
+);

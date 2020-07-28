@@ -6,7 +6,7 @@ const port = process.env.PORT || 9000;
 
 //starting server at port
 app.listen(port, ()=> {
-    console.log(`Server started at ${port}`)
+    console.log(`Server started at ${port}`);
 })
 
 //json parsing
@@ -57,15 +57,3 @@ app.get("/cars", (req,res)=> {
         res.send(data);
     })
 })
-// app.delete("/cars/:sid", (req,res)=> {
-//     const cars = new Cars(req.body);
-//     cars.seller = req.params.sid;
-//     Cars.findByIdAndDelete(req.params.id, (err,seller)=> {
-//         if (err) throw err;
-//         else {
-//             seller.car.delete(cars._id);
-//             seller.save();
-//             res.send(data);
-//         }
-//     })
-// })
